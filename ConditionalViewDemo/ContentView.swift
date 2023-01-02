@@ -9,14 +9,41 @@
 import SwiftUI
 
 struct ContentView: View {
+    let vegetables = ["lettuce", "tomato", "cucumber", "carrot", "pepper", "onion"]
+    
+    @State private var data = [String]()
+    @State private var isListShowing: Bool = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        NavigationStack {
+            VStack {
+                if isListShowing {
+                    List(data, id: \.self) { item in
+                        Text(item.capitalized)
+                    }
+                } else {
+                    Text("no data")
+                        .foregroundColor(.secondary)
+                }
+            }
+            .navigationTitle("Vegetables")
         }
-        .padding()
+        .overlay(alignment: .topTrailing) {
+            Button {
+                isListShowing.toggle()
+                
+                if isListShowing {
+                    data = vegetables
+                } else {
+                    data = [String]()
+                }
+            } label: {
+                Image(systemName: isListShowing ? "xmark" : "arrow.clockwise")
+                    .font(.title)
+            }
+            .padding()
+
+        }
     }
 }
 
